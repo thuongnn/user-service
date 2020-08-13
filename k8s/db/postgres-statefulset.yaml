@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: postgres
+  name: user-postgres
 spec:
-  serviceName: postgres
+  serviceName: user-postgres
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: user-postgres
   template:
     metadata:
       labels:
-        app: postgres
+        app: user-postgres
     spec:
       containers:
-        - name: postgres
+        - name: user-postgres
           image: postgres:latest
           envFrom:
             - configMapRef:
-                name: postgres-config
+                name: user-postgres-config
           ports:
             - containerPort: 5432
           volumeMounts:
@@ -31,7 +31,7 @@ spec:
       volumes:
         - name: postgres-persistent-storage
           persistentVolumeClaim:
-            claimName: postgres-pv-claim
+            claimName: user-postgres-pv-claim
         - name: init-script
           configMap:
-            name: postgres-init-script
+            name: user-postgres-init-script
