@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: book-api
+  name: book-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: book-api
+      tier: server
+  template:
+    metadata:
+      labels:
+        run: book-api
+        tier: server
+    spec:
+      containers:
+        - name: book-api
+          image: registry.gitlab.com/be-devops-tranning/book-service/server:prod
+          imagePullPolicy: Always
+          env:
+            - name: POSTGRESQL_HOST
+              value: "postgres.default.svc.cluster.local"
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
+      imagePullSecrets:
+        - name: gitlab-key

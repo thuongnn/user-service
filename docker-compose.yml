@@ -1,0 +1,42 @@
+version: '2.3'
+services:
+  postgresql:
+    image: postgres
+    container_name: user-db
+    restart: always
+    env_file:
+      - ./config/db/env
+    cap_drop:
+      - ALL
+    ports:
+      - 5432:5432
+    cap_add:
+      - ALL
+    volumes:
+      - ./config/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - user-service
+  user-api:
+    container_name: user-api
+    build: .
+    env_file:
+      - config/app/.env
+    restart: always
+    ports:
+    - 8080:8080
+    cap_drop:
+      - ALL
+    cap_add:
+      - ALL
+    networks:
+      - user-service
+    depends_on:
+      - postgresql
+      - redis
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    networks:
+      - user-service
+networks:
+  user-service:

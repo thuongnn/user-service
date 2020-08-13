@@ -1,0 +1,4 @@
+POSTGRES_PASSWORD=root123
+POSTGRES_DB=registry
+POSTGRES_USER=postgres
+TZ=Asia/Singapore
