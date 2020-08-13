@@ -6,15 +6,14 @@ import (
 	_ "github.com/lib/pq" // here
 	"strconv"
 	"sync"
-	"user-service/src/common/utils"
 	"user-service/src/models"
 )
 
 // InitDatabase registers the database
 func InitDatabase(db *models.Database) error {
-	if err := utils.TestTCPConn(fmt.Sprintf("%s:%d", db.Host, db.Port), 60, 2); err != nil {
-		return err
-	}
+	//if err := utils.TestTCPConn(fmt.Sprintf("%s:%d", db.Host, db.Port), 60, 2); err != nil {
+	//	return err
+	//}
 
 	if err := orm.RegisterDriver("postgres", orm.DRPostgres); err != nil {
 		return err
