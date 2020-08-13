@@ -22,9 +22,9 @@ spec:
           imagePullPolicy: Always
           env:
             - name: POSTGRESQL_HOST
-              value: "user-postgres.default.svc.cluster.local"
+              value: "postgres"
             - name: REDIS_URL
-              value: "redis.default.svc.cluster.local"
+              value: "redis"
           ports:
             - containerPort: 8080
           readinessProbe:

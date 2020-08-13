@@ -4,7 +4,6 @@ import (
 	"fmt"
 	rd "github.com/go-redis/redis/v7"
 	"time"
-	"user-service/src/common/utils"
 )
 
 var client *rd.Client
@@ -16,9 +15,9 @@ type Config struct {
 }
 
 func Init(c *Config) error {
-	if err := utils.TestTCPConn(fmt.Sprintf("%s:%d", c.Host, c.Port), 60, 2); err != nil {
-		return err
-	}
+	//if err := utils.TestTCPConn(fmt.Sprintf("%s:%d", c.Host, c.Port), 60, 2); err != nil {
+	//	return err
+	//}
 
 	//Initializing redis
 	fmt.Println("Initializing redis")
