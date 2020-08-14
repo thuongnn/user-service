@@ -39,7 +39,7 @@ deploy_live:
   script:
 #    - kubectl patch deployment user-api -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"build\":\"$CI_COMMIT_SHORT_SHA\"}}}}}}"
     - kubectl apply -f ./k8s/db/
-    - kubectl apply 0f ./k8s/redis/
+    - kubectl apply -f ./k8s/redis/
     - |
       if kubectl apply -f ./k8s/app/app-deployment.yaml | grep -q unchanged; then
           echo "=> Patching server deployment to force image update."
