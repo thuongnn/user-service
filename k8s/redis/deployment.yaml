@@ -28,10 +28,11 @@ spec:
 apiVersion: v1
 kind: Service        # Type of Kubernetes resource
 metadata:
-  name: redis        # Name of the Kubernetes resource
+  name: redis-svc    # Name of the Kubernetes resource
   labels:            # Labels that will be applied to this resource
     app: redis
 spec:
+  type: NodePort
   ports:
     - port: 6379       # Map incoming connections on port 6379 to the target port 6379 of the Pod
       targetPort: 6379
