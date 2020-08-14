@@ -33,5 +33,5 @@ func registerRoutes() {
 	beego.Router("/sign-up", &api.AuthAPI{}, "post:Register")
 	beego.Router("/sign-in", &api.AuthAPI{}, "post:Login")
 	beego.Router("/sign-out", &api.AuthAPI{}, "post:Logout")
-	beego.Router("/users/current", &api.UserAPI{}, "get:Get")
+	beego.Router("/current", &api.UserAPI{}, "get:Get")
 }
