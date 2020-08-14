@@ -17,26 +17,32 @@ image_build:
     - docker info
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
   script:
-#    - docker pull $SERVER_IMAGE:latest || true
-#    - docker build --pull --cache-from $SERVER_CACHE_IMAGE:prod -t book-service-server .
+    - docker pull $SERVER_IMAGE:latest || true
+    - docker build --pull --cache-from $SERVER_CACHE_IMAGE:prod -t book-service-server .
     - docker build -t book-service-server .
     - docker tag book-service-server $SERVER_IMAGE:prod
     - docker push $SERVER_IMAGE:prod
 
-#deploy_live:
-#  image:
-#    name: lwolf/helm-kubectl-docker
-#    entrypoint: [""]
-#  stage: deploy_live
-#  only:
-#    - master
-#  before_script:
-#    - kubectl config set-cluster k8s --server="$CLUSTER_ADDRESS"
-#    - kubectl config set-cluster k8s --certificate-authority=$CA_AUTH_DATA
-#    - kubectl config set-credentials gitlab-admin --token=$K8S_TOKEN
-#    - kubectl config set-context default --cluster=k8s --user=gitlab-admin --namespace=default
-#    - kubectl config use-context default
-#  script:
-#    - kubectl patch deployment book-api -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"build\":\"$CI_COMMIT_SHORT_SHA\"}}}}}}"
-#    - kubectl rollout restart deployment book-api
+deploy_live:
+  image:
+    name: lwolf/helm-kubectl-docker
+    entrypoint: [""]
+  stage: deploy_live
+  only:
+    - master
+  before_script:
+    - kubectl config set-cluster k8s --server="$CLUSTER_ADDRESS"
+    - kubectl config set-cluster k8s --certificate-authority=$CA_AUTH_DATA
+    - kubectl config set-credentials gitlab-admin --token=$K8S_TOKEN
+    - kubectl config set-context default --cluster=k8s --user=gitlab-admin --namespace=default
+    - kubectl config use-context default
+  script:
+#    - kubectl patch deployment user-api -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"build\":\"$CI_COMMIT_SHORT_SHA\"}}}}}}"
+    - |
+      if kubectl apply -f ./k8s/app/app-deployment.yaml | grep -q unchanged; then
+          echo "=> Patching server deployment to force image update."
+          kubectl patch deployment user-api -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"build\":\"$CI_COMMIT_SHORT_SHA\"}}}}}}"
+      else
+          echo "=> Server Deployment apply has changed the object, no need to force image update."
+      fi
 
