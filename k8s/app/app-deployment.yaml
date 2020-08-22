@@ -22,7 +22,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: POSTGRESQL_HOST
-              value: "postgres"
+              value: "user-postgres"
             - name: REDIS_URL
               value: "redis-svc"
           ports:
