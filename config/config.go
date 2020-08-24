@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"github.com/spf13/viper"
+	"strconv"
 	"user-service/src/common/redis"
 	"user-service/src/models"
 )
@@ -57,4 +58,10 @@ func RedisConfig() *redis.Config {
 		Port:     viper.GetInt64(RedisPort),
 		Password: viper.GetString(RedisPassword),
 	}
+}
+
+func GetUserServicePort() int {
+	port := viper.GetString(ApplicationPort)
+	p, _ := strconv.Atoi(port[1:len(port)])
+	return p
 }
