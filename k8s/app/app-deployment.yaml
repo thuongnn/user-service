@@ -27,6 +27,8 @@ spec:
               value: "user-postgres"
             - name: REDIS_URL
               value: "redis-svc"
+            - name: CONSUL_HTTP_ADDR
+              value: consul-ui
           ports:
             - containerPort: 8080
           readinessProbe:
