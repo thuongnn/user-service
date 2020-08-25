@@ -3,14 +3,12 @@ package config
 import (
 	"fmt"
 	"github.com/spf13/viper"
-	"strconv"
 	"user-service/src/common/redis"
 	"user-service/src/models"
 )
 
 const (
 	ApplicationPort        = "port"
-	HostName               = "host_name"
 	PostGreSQLHOST         = "postgresql_host"
 	PostGreSQLPort         = "postgresql_port"
 	PostGreSQLUsername     = "postgresql_username"
@@ -59,14 +57,4 @@ func RedisConfig() *redis.Config {
 		Port:     viper.GetInt64(RedisPort),
 		Password: viper.GetString(RedisPassword),
 	}
-}
-
-func GetUserServicePort() int {
-	port := viper.GetString(ApplicationPort)
-	p, _ := strconv.Atoi(port)
-	return p
-}
-
-func GetBookHostName() string {
-	return viper.GetString(HostName)
 }

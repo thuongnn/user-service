@@ -17,6 +17,8 @@ spec:
         tier: server
       annotations:
         'consul.hashicorp.com/connect-inject': 'true'
+        'consul.hashicorp.com/connect-service': 'user-api'
+        'consul.hashicorp.com/connect-service-upstreams': 'book-api:8081'
     spec:
       containers:
         - name: user-api

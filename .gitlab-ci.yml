@@ -17,7 +17,7 @@ image_build:
     - docker info
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
   script:
-    - docker pull $SERVER_IMAGE:prod || true
+    - docker pull $SERVER_IMAGE:latest || true
     - docker build --pull --cache-from $SERVER_CACHE_IMAGE:prod -t book-service-server .
     - docker build -t book-service-server .
     - docker tag book-service-server $SERVER_IMAGE:prod

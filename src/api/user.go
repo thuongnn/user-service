@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	consulapi "github.com/hashicorp/consul/api"
 	"net/http"
 	"user-service/src/models"
 )
@@ -26,12 +25,9 @@ func (ua *UserAPI) Get() {
 	}
 
 	var b []models.Book
-	url, err := lookupServiceWithConsul("book-service")
+	url := "http://127.0.0.1:8081"
 	fmt.Println("URL: ", url)
-	if err != nil {
-		ua.SendStatusServiceUnavailableError(err)
-		return
-	}
+
 	client := &http.Client{}
 	resp, err := client.Get(url + "/all")
 	if err != nil {
@@ -47,20 +43,4 @@ func (ua *UserAPI) Get() {
 
 	ua.Data["json"] = b
 	ua.ServeJSON()
-}
-
-func lookupServiceWithConsul(serviceName string) (string, error) {
-	config := consulapi.DefaultConfig()
-	consul, err := consulapi.NewClient(config)
-	if err != nil {
-		return "", err
-	}
-	services, err := consul.Agent().Services()
-	if err != nil {
-		return "", err
-	}
-	srvc := services[serviceName]
-	address := srvc.Address
-	port := srvc.Port
-	return fmt.Sprintf("http://%s:%v", address, port), nil
 }
